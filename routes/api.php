@@ -57,7 +57,6 @@ Route::group([
     Route::put('/{pagador_id}', 'PagadorController@update');
     Route::delete('/{pagador_id}', 'PagadorController@destroy');
     Route::get('me', 'PagadorController@show');
-    Route::get('/{pagador_id}', 'PagadorController@pagador_boleto');
 });
 
 
