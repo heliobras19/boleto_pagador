@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\ResponseAPI;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use mysql_xdevapi\Exception;
 
 class AuthController extends Controller
 {
-    public function __construct()
+    private $response;
+    public function __construct(ResponseAPI $responseAPI)
     {
-        try {
-            $this->middleware('auth:api', ['except' => ['login']]);
-        }catch (Exception $e){
-            return response()->json("Token invalido", 401);
-        }
-
+        $this->response = $responseAPI;
+            $this->middleware('auth:api', ['except' => ['login', 'register']]);
     }
 
     /**
@@ -24,7 +25,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(LoginRequest $loginRequest)
     {
         $credentials = request(['email', 'password']);
 
@@ -33,6 +34,19 @@ class AuthController extends Controller
         }
 
         return $this->respondWithToken($token);
+    }
+
+    public function register(Request $request, RegisterRequest $registerRequest){
+
+        $data = $request->all();
+        User::create([
+            'name' => $data['name'],
+            'sobrenome' => $data['sobrenome'],
+            'email' => $data['email'],
+            'password' => Hash::make($data['password']),
+        ]);
+
+        return $this->response->sucess($data);
     }
 
 

@@ -24,15 +24,15 @@ class CreateBoletosTable extends Migration
             $table->string('instrucao_3')->nullable();
             $table->text('descricao');
             $table->string('tipo_multa')->nullable();
-            $table->integer('valor_multa');
+            $table->integer('valor_multa')->nullable();;
             $table->string('tipo_juros')->nullable();
-            $table->integer('valor_juros');
+            $table->integer('valor_juros')->nullable();;
             $table->string('tipo_desconto')->nullable();
-            $table->integer('valor_desconto');
-            $table->string('data_limite_desconto');
+            $table->integer('valor_desconto')->nullable();;
+            $table->string('data_limite_desconto')->nullable();;
             $table->string('referencia')->nullable();
             $table->timestamps();
-           // $table->foreign('id_pagador')->references('id')->on('pagadors')->onDelete('cascade');
+            $table->foreign('id_pagador')->references('id')->on('pagadors');
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
         });
     }

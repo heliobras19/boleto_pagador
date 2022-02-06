@@ -18,10 +18,10 @@ class   CreatePagadorsTable extends Migration
             $table->unsignedBigInteger('id_usuario');
             $table->string('nome');
             $table->string('documento');
-            $table->integer('celular');
+            $table->string('celular', 10);
             $table->string('email');
             $table->string('data_de_nascimento');
-            $table->string('cep');
+            $table->string('cep', 11);
             $table->string('rua');
             $table->string('bairro');
             $table->string('numero')->nullable();

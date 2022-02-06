@@ -14,20 +14,23 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+
+Route::get('nao_logado', function (){
+   return response()->json([
+        "msg" => "token inválido, faça autenticação por favor"
+    ]);
+})->name('login');
 
 Route::group([
     'namespace' => 'App\Http\Controllers',
     'middleware' => 'api',
-    'prefix' => 'auth'
 
 ], function ($router) {
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
-    Route::post('me', 'AuthController@me');
+    Route::get('me', 'AuthController@me');
     Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
 });
 
 
@@ -37,12 +40,24 @@ Route::group([
     'prefix' => 'boleto'
 
 ], function ($router) {
-   Route::post('create', 'BoletoController@create');
-   Route::put('create/{boleto_id}', 'BoletoController@update');
-   Route::delete('create/{boleto_id}', 'BoletoController@destroy');
+   Route::post('/', 'BoletoController@create');
+   Route::put('/{boleto_id}', 'BoletoController@update');
+   Route::delete('/{boleto_id}', 'BoletoController@destroy');
    Route::get('me', 'BoletoController@show');
-   Route::get('pagador/{pagador_id}', 'BoletoController@show');
+   Route::get('pagador/{pagador_id}', 'BoletoController@pagador_boleto');
+});
+
+Route::group([
+    'namespace' => 'App\Http\Controllers',
+    'middleware' => 'api',
+    'prefix' => 'pagador'
+
+], function ($router) {
+    Route::post('/', 'PagadorController@create');
+    Route::put('/{pagador_id}', 'PagadorController@update');
+    Route::delete('/{pagador_id}', 'PagadorController@destroy');
+    Route::get('me', 'PagadorController@show');
+    Route::get('/{pagador_id}', 'PagadorController@pagador_boleto');
 });
 
 
-Route::post('register', 'App\Http\Controllers\RegisterController@register');
